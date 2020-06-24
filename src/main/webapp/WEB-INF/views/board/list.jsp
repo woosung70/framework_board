@@ -25,8 +25,8 @@
 		//location.href = "<c:url value='/board/write.do'/>";
 		location.href = "write.do";
 	}
-	function view(idx) {
-		location.href = "view.do?idx=" + idx;
+	function view(pageNum, idx) {
+		location.href = "view.do?pageNum="+pageNum+"&idx=" + idx;
 	}
 </script>
 </head>
@@ -64,7 +64,7 @@
 							<c:forEach items="${list}" var="list">
 								<tr>
 									<td class="text-center">${list.idx}</td>
-									<td><a href="javascript:view('${list.idx}');"> <c:out value="${list.title}" />
+									<td><a href="javascript:view('${paging.cri.pageNum}', '${list.idx}');"> <c:out value="${list.title}" />
 									</a></td>
 									<td class="text-center">${list.reg_date}</td>
 									<td class="text-center">${list.mod_date}</td>

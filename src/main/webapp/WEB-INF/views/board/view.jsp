@@ -53,23 +53,30 @@
 </style>
 <script src="<c:url value='/resources/js/common.js' />"></script>
 <script>
-	function list() {
+	function list(pageNum) {
 		//alert('테스트입니다.');
-		location.href = "list.do";
+		location.href = "list.do?pageNum="+pageNum;
 	}
-	function modifyBoard(idx, user_id, login_id) {
+	function modifyBoard(pageNum, idx, login_id, user_id) {
 		console.log('user_id: ' + user_id);
 		console.log('login_id: ' + login_id);
-		if(user_id == login_id){
-			location.href = "modify.do?idx=" + idx;
-		}else{
+		if(!login_id){
+			alert('게시물 수정은 로그인후 작성자만 할 수 있습니다.');
+		}else if(login_id != user_id){
 			alert('게시물 수정은 작성자만 할 수 있습니다.');
+		}else{
+			location.href = "modify.do?pageNum="+pageNum+"&idx=" + idx;
 		}
-		//
 	}
-	function deleteBoard(idx) {
-		if (confirm("삭제하시겠습니까?")) {
-			location.href = "delete.do/"+idx;
+	function deleteBoard(pageNum, idx, login_id, user_id) {
+		if(!login_id){
+			alert('게시물 삭제는 로그인후 작성자만 할 수 있습니다.');
+		}else if(login_id != user_id){
+			alert('게시물 삭제는 작성자만 할 수 있습니다.');
+		}else{
+			if (confirm("삭제하시겠습니까?")) {
+				location.href = "delete.do/"+idx+"?pageNum="+pageNum;
+			}
 		}
 	}
 </script>
@@ -118,15 +125,15 @@
 			</div>
 			<div class="panel-footer">
 				<div class="btn-group">
-					<button type="button" class="btn btn-primary" id="btnList" onclick="list();">게시물목록</button>
+					<button type="button" class="btn btn-primary" id="btnList" onclick="list('${pageNum}');">게시물목록</button>
 				</div>
 				<div class="btn-group">
-					<button type="button" class="btn btn-primary" id="btnModify" onclick="modifyBoard('${view.idx}','${view.user_id}','${sessionScope.login_id}');">
+					<button type="button" class="btn btn-primary" id="btnModify" onclick="modifyBoard('${pageNum}','${view.idx}','${sessionScope.login_id}','${view.user_id}');">
 					게시물수정
 					</button>
 				</div>
 				<div class="btn-group">
-					<button type="button" class="btn btn-primary" id="btnDelete" onclick="deleteBoard('${view.idx}');">
+					<button type="button" class="btn btn-primary" id="btnDelete" onclick="deleteBoard('${pageNum}','${view.idx}','${sessionScope.login_id}','${view.user_id}');">
 					게시물삭제
 					</button>
 				</div>

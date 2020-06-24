@@ -26,7 +26,15 @@
 	function list() {
 		location.href = "list.do";
 	}
-	function save() {
+	function save(login_id, user_id) {
+		if(!login_id){
+			alert('게시물 수정은 로그인후 작성자만 할 수 있습니다.');
+			return;
+		}
+		if(login_id != user_id){
+			alert('게시물 수정은 작성자만 할 수 있습니다.');
+			return;
+		}
 		if ($('#title').val() == '') {
 			alert("제목을 입력하세요");
 			$('#title').focus();
@@ -62,6 +70,7 @@
 			</div>
 			<div class="panel-body">
 				<form id="writeform" name="modifyform" class="form-horizontal" method="post">
+					<input type="hidden" id="pageNum" name="pageNum" value="${pageNum}">
 					<input type="hidden" id="idx" name="idx" value="${view.idx}">
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="title">제목:</label>
@@ -85,7 +94,7 @@
 			</div>
 			<div class="panel-footer text-right">
 				<div class="btn-group">
-					<button type="submit" class="btn btn-primary" id="btnSave" onclick="save();">수정</button>
+					<button type="submit" class="btn btn-primary" id="btnSave" onclick="save('${sessionScope.login_id}','${view.user_id}');">수정</button>
 				</div>
 				<div class="btn-group">
 					<button type="button" class="btn btn-primary" id="btnList" onclick="javascript:history.back();">취소</button>

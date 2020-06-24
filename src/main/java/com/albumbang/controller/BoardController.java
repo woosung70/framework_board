@@ -68,38 +68,40 @@ public class BoardController {
 
 	// 게시물 조회
 	@RequestMapping(value = "/view.do", method = RequestMethod.GET)
-	public void getView(@RequestParam("idx") int idx, Model model) throws Exception {
+	public void getView(@RequestParam("pageNum") String pageNum, @RequestParam("idx") int idx, Model model) throws Exception {
 
 		Board vo = service.view(idx);
 		System.out.println("vo.getUser_id() ===> "+vo.getUser_id());
 
 		model.addAttribute("view", vo);
+		model.addAttribute("pageNum", pageNum);
 
 	}
 
 	// 게시물 수정
 	@RequestMapping(value = "/modify.do", method = RequestMethod.GET)
-	public void getModify(@RequestParam("idx") int idx, Model model) throws Exception {
+	public void getModify(@RequestParam("pageNum") String pageNum, @RequestParam("idx") int idx, Model model) throws Exception {
 
 		Board vo = service.view(idx);
 
 		model.addAttribute("view", vo);
+		model.addAttribute("pageNum", pageNum);
 	}
 
 	// 게시물 수정
 	@RequestMapping(value = "/modify.do", method = RequestMethod.POST)
-	public String postModify(Board vo) throws Exception {
+	public String postModify(@RequestParam("pageNum") String pageNum, Board vo) throws Exception {
 		System.out.println("vo.getIdx() ===> "+vo.getIdx());
 		service.modify(vo);
 
-		return "redirect:/board/view.do?idx=" + vo.getIdx();
+		return "redirect:/board/view.do?pageNum="+pageNum+"&idx=" + vo.getIdx();
 	}
 	
 	// 게시물 삭제
 	@RequestMapping(value="/delete.do/{idx}")
-	public String delete(@PathVariable String idx) throws Exception {
+	public String delete(@RequestParam("pageNum") String pageNum, @PathVariable String idx) throws Exception {
 		service.delete(idx);;
-		return "redirect:/board/list.do";
+		return "redirect:/board/list.do?pageNum="+pageNum;
 	}
 	
 	@RequestMapping(value = "/login_check.do", method = RequestMethod.POST)
