@@ -3,7 +3,7 @@ package com.albumbang.domain;
 public class PageCriteria {
 	
 	private int pageNum=1;	//현재 페이지 번호
-	private int amount=5;	//페이지당 데이터 갯수
+	private int amount=10;	//페이지당 데이터 갯수
 	
 	private String keyword="";
 
