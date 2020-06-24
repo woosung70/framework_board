@@ -17,7 +17,11 @@
 
 <script src="<c:url value='/resources/js/common.js' />"></script>
 <script>
-	function add() {
+	function add(login_id) {
+		if (!login_id) {
+			alert("로그인후 등록 가능합니다.");
+			return;
+		}
 		//location.href = "<c:url value='/board/write.do'/>";
 		location.href = "write.do";
 	}
@@ -52,7 +56,7 @@
 								<th>제목</th>
 								<th class="text-center">작성일</th>
 								<th class="text-center">수정일</th>
-								<th>작성자</th>
+								<th class="text-center">작성자</th>
 								<th class="text-center">조회수</th>
 							</tr>
 						</thead>
@@ -64,7 +68,7 @@
 									</a></td>
 									<td class="text-center">${list.reg_date}</td>
 									<td class="text-center">${list.mod_date}</td>
-									<td>${list.user_name}(${list.user_id})</td>
+									<td class="text-center">${list.user_name}(${list.user_id})</td>
 									<td class="text-center">${list.cnt}</td>
 								</tr>
 							</c:forEach>
@@ -114,7 +118,7 @@
 			</div>
 			<div class="panel-footer">
 				<div class="btn-group">
-					<button type="button" class="btn btn-primary" id="btnInsert" onclick="add();">게시물등록</button>
+					<button type="button" class="btn btn-primary" id="btnInsert" onclick="add('${sessionScope.login_id}');">게시물등록</button>
 				</div>
 			</div>
 		</div>
