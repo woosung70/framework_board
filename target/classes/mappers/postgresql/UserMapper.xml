@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+
+	<select id="view" parameterType="string"
+		resultType="com.albumbang.domain.User">
+		select * from tb_users where user_id=#{user_id}
+	</select>
+
+	<select id="list" resultType="com.albumbang.domain.User">
+		select user_id, user_name, email, gender, city, use_yn
+		, TO_CHAR(reg_date, 'YYYY-MM-DD HH24:MI') reg_date, TO_CHAR(mod_date, 'YYYY-MM-DD HH24:MI') mod_date
+		from tb_users order by reg_date desc
+	</select>
+
+	<insert id="insert" parameterType="com.albumbang.domain.User">
+		insert into tb_users (user_id,
+		password, user_name, email, gender, city, use_yn)
+		values
+		(#{user_id},#{password},#{user_name},#{email},#{gender},#{city},'Y' )
+	</insert>
+
+	<update id="update" parameterType="com.albumbang.domain.User">
+		update tb_users set
+		password =	#{password},
+		user_name =	#{user_name},
+		email =	#{email},
+		mod_date =	now(),
+		gender = #{gender},
+		city = #{city}
+		where user_id =	#{user_id}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		delete from tb_users where
+		user_id = #{value}
+	</delete>
+</mapper>
+ 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+
+	<select id="view" parameterType="string"  resultType="com.albumbang.domain.User">
+	 	select * from users where userid=#{id}
+	</select>
+	
+	<select id="list" resultType="com.albumbang.domain.User">
+		select * from users order by userid
+	</select>
+	
+	<insert id="insert" parameterType="com.albumbang.domain.User">
+		insert into users values(#{userId},#{name},#{gender},#{city} )
+	</insert>
+
+	<update id="update" parameterType="com.albumbang.domain.User">
+		update users set
+		name =
+		#{name},
+		gender = #{gender},
+		city = #{city}
+		where userid = #{userId}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		delete from users where
+		userid = #{value}
+	</delete>
+</mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

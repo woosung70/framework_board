@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.albumbang.mapper.BoardMapper">
+
+	<!-- 게시물 목록 -->
+	<select id="list" parameterType="com.albumbang.domain.PageCriteria" resultType="com.albumbang.domain.Board">
+		<include refid="paging_header" />
+		select
+			idx, title, contents, user_id, user_name, reg_date, mod_date, cnt
+		from tb_board 
+		<include refid="search" />
+		order by reg_date desc
+		<include refid="paging_footer" />
+	</select>
+	
+	<!-- 레코드 갯수 계산 -->	
+	<select id="totalCount" parameterType="com.albumbang.domain.PageCriteria" resultType="int">
+		select 
+			count(*) 
+		from tb_board
+		<include refid="search" />
+	</select>
+
+	<sql id="paging_header">
+		select *
+		from (
+		    select rownum as rnum, A.*
+		    from (	
+	</sql>
+	
+	<!-- 시작번호=(현재페이지-1)x페이지당 게시물수 + 1 -->
+	<!-- 끝번호=시작번호 + 페이지당 게시물수 - 1 -->	
+	<sql id="paging_footer">
+		    ) A
+		) where rnum between (#{pageNum}-1)*#{amount}+1 and ((#{pageNum}-1)*#{amount}+1)+#{amount}-1
+	</sql>
+	
+	<sql id="search">
+		<if test="keyword != null and keyword != ''">
+		where (title like '%'||#{keyword}||'%' or contents like '%'||#{keyword}||'%' or user_name like '%'||#{keyword}||'%')
+		</if>
+	</sql>
+
+	<!-- 게시물 작성 -->
+	<insert id="write" parameterType="com.albumbang.domain.Board">
+		insert into tb_board (idx, title, contents, user_id, user_name)
+				values
+				((select nvl(max(idx)+1,1) from tb_board), #{title}, #{contents}, #{user_id}, #{user_name})
+	</insert>
+	
+	<!-- 게시물 조회 -->
+	<select id="view" parameterType="int" resultType="com.albumbang.domain.Board">
+		select 
+			idx, title, contents, user_id, user_name, reg_date, cnt
+		from 
+			tb_board
+		where
+			idx = #{idx}			
+	</select>
+
+	<!-- 조회수 증가 처리 -->
+	<update id="increaseCnt">
+		update tb_board set cnt=cnt+1
+		where idx=#{idx}
+	</update>
+
+	<!-- 게시물 수정 -->
+	<update id="modify" parameterType="com.albumbang.domain.Board" >
+		update tb_board
+			set
+				title = #{title},
+				contents = #{contents},
+				user_name = #{user_name},
+				mod_date =	sysdate
+			where idx = #{idx}
+	</update>
+
+	<!-- 게시물 삭제 -->
+	<delete id="delete" parameterType="string">
+		delete from tb_board where
+		idx = #{idx}
+	</delete>
+
+</mapper>

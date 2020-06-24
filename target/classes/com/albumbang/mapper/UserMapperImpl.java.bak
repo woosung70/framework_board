@@ -1,0 +1,52 @@
+package com.albumbang.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.albumbang.domain.User;
+
+@Repository
+public class UserMapperImpl implements UserMapper {
+
+	@Autowired
+	// @Resource(name = "SqlSession")
+	SqlSession userMapper;
+
+	private static String namespace = "user";
+
+	@Override
+	public User view(String id) {
+		User user = userMapper.selectOne(namespace + ".view", id);// .selectUserById(id);
+		return user;
+	}
+
+	public List<User> list() {
+		List<User> list = userMapper.selectList(namespace + ".list"); // .selectUserList();
+		return list;
+	}
+
+	public void insert(User user) {
+		userMapper.insert(namespace + ".insert", user);
+		System.out.println("등록된 Record=" + user.toString());
+	}
+
+	@Override
+	public void update(User user) {
+		userMapper.update(namespace + ".update", user);
+	}
+
+	@Override
+	public void delete(String user_id) {
+		userMapper.delete(namespace + ".delete", user_id);
+		System.out.println("삭제된 Record with user_id = " + user_id);
+	}
+
+	@Override
+	public String loginCheck(User user) {
+		return userMapper.selectOne(namespace + ".loginCheck", user);
+	}
+
+}

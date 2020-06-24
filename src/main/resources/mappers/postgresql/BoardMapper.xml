@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<!-- 게시물 목록 -->
+	<select id="list" resultType="com.albumbang.domain.Board">
+		select
+			idx, title, contents, user_name, reg_date, cnt
+		from tb_board order by reg_date desc
+	</select>
+	
+	<!-- 게시물 작성 -->
+	<insert id="write" parameterType="com.albumbang.domain.Board">
+		insert into tb_board (title, contents, user_name)
+				values
+				(#{title}, #{contents}, #{user_name})
+	</insert>
+	
+	<!-- 게시물 조회 -->
+	<select id="view" parameterType="int" resultType="com.albumbang.domain.Board">
+		select 
+			idx, title, contents, user_name, reg_date, cnt
+		from 
+			tb_board
+		where
+			idx = #{idx}			
+	</select>
+
+	<!-- 게시물 수정 -->
+	<update id="modify" parameterType="com.albumbang.domain.Board" >
+		update tb_board
+			set
+				title = #{title},
+				contents = #{contents},
+				user_name = #{user_name},
+				mod_date =	now()
+			where idx = #{idx}
+	</update>
+
+	<!-- 게시물 삭제 -->
+	<delete id="delete" parameterType="string">
+		delete from tb_board where
+		idx = #{idx}
+	</delete>
+
+</mapper>

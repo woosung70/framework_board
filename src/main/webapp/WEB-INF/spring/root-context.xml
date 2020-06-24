@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<context:property-placeholder location="/WEB-INF/config/db.properties" />
+
+	<!-- DataSource 설정 -->
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		
+		<property name="driverClass" value="${db.oracle.driverClass}" />
+		<property name="url" value="${db.oracle.url}" />
+		<property name="username" value="${db.oracle.username}" />
+		<property name="password" value="${db.oracle.password}" />
+		
+		<!-- <property name="driverClass" value="${db.mariadb.driverClass}" />
+		<property name="url" value="${db.mariadb.url}" />
+		<property name="username" value="${db.mariadb.username}" />
+		<property name="password" value="${db.mariadb.password}" /> -->
+		
+		<!-- <property name="driverClass" value="${db.postgresql.driverClass}" />
+		<property name="url" value="${db.postgresql.url}" />
+		<property name="username" value="${db.postgresql.username}" />
+		<property name="password" value="${db.postgresql.password}" /> -->
+		
+	</bean>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:/mybatis-config.xml" />
+		
+		<property name="mapperLocations" value="classpath:mappers/oracle/*Mapper.xml" />
+		
+		<!-- <property name="mapperLocations" value="classpath:mappers/mariadb/*Mapper.xml" /> -->
+		
+		<!-- <property name="mapperLocations" value="classpath:mappers/postgresql/*Mapper.xml" /> -->
+		
+	</bean>
+	
+	<!--
+	기존 설정과 달라진 점은 더이상 sqlSession을 써서 수동으로 dao를 만들지 않기 때문에 sqlSession 설정을 뺐다는 점과, 
+	그 대신 맵퍼를 
+	인식하게 하기위해서 MapperScannerConfigurer를 사용하여 mapper 패키지를 basePackage로 설정했다는 점입니다. 	
+	-->
+	
+	<!-- 	
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>	
+	-->
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.albumbang.mapper" />
+	</bean>
+	
+ </beans>
